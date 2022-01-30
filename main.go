@@ -1,7 +1,46 @@
 package main
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"strings"
+	"watermarkApi/lib"
+)
+
+type Watermark struct {
+	Image string `json:"image"`
+	Text  string `json:"text"`
+}
+
+func embed(w http.ResponseWriter, r *http.Request) {
+	var watermark Watermark
+	json.NewDecoder(r.Body).Decode(&watermark)
+	// sourceImage := lib.InputImage("./Lenna.png")
+	// enc := base64.StdEncoding.EncodeToString(sourceImage)
+	image := lib.DecodeBase64(watermark.Image)
+	embedImage := lib.EmbedWatermark(image, watermark.Text)
+	json.NewEncoder(w).Encode(Watermark{
+		Image: lib.EncodeBase64(embedImage),
+		Text:  watermark.Text,
+	})
+}
+
+func decode(w http.ResponseWriter, r *http.Request) {
+	var watermark Watermark
+	json.NewDecoder(r.Body).Decode(&watermark)
+	// sourceImage := lib.InputImage("./Lenna.png")
+	// enc := base64.StdEncoding.EncodeToString(sourceImage)
+	image := lib.DecodeBase64(watermark.Image)
+	embedText := lib.DecodeWatermark(image)
+	json.NewEncoder(w).Encode(Watermark{
+		Text: strings.TrimSpace(embedText),
+	})
+}
 
 func main() {
-	fmt.Println("hello world")
+	http.HandleFunc("/api/embed", embed)
+	http.HandleFunc("/api/decode", decode)
+	fmt.Println("http://localhost:8080/api")
+	http.ListenAndServe(":8080", nil)
 }
