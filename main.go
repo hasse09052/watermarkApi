@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 	"watermarkApi/lib"
 )
@@ -14,10 +15,15 @@ type Watermark struct {
 }
 
 func embed(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("call embed!!")
 	var watermark Watermark
 	json.NewDecoder(r.Body).Decode(&watermark)
 	// sourceImage := lib.InputImage("./Lenna.png")
 	// enc := base64.StdEncoding.EncodeToString(sourceImage)
+
+	f, _ := os.Create("test.txt")
+	fmt.Fprintln(f, r.Body)
+
 	image := lib.DecodeBase64(watermark.Image)
 	embedImage := lib.EmbedWatermark(image, watermark.Text)
 	json.NewEncoder(w).Encode(Watermark{
