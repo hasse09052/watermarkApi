@@ -1,12 +1,11 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
-	"net/http"
-	"os"
-	"strings"
+	"time"
 	"watermarkApi/lib"
+
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 )
 
 type Watermark struct {
@@ -14,39 +13,61 @@ type Watermark struct {
 	Text  string `json:"text"`
 }
 
-func embed(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("call embed!!")
+func embed(c *gin.Context) {
 	var watermark Watermark
-	json.NewDecoder(r.Body).Decode(&watermark)
-	// sourceImage := lib.InputImage("./Lenna.png")
-	// enc := base64.StdEncoding.EncodeToString(sourceImage)
-
-	f, _ := os.Create("test.txt")
-	fmt.Fprintln(f, r.Body)
+	c.BindJSON(&watermark)
 
 	image := lib.DecodeBase64(watermark.Image)
 	embedImage := lib.EmbedWatermark(image, watermark.Text)
-	json.NewEncoder(w).Encode(Watermark{
+	c.JSON(200, Watermark{
 		Image: lib.EncodeBase64(embedImage),
 		Text:  watermark.Text,
 	})
 }
 
-func decode(w http.ResponseWriter, r *http.Request) {
+func decode(c *gin.Context) {
 	var watermark Watermark
-	json.NewDecoder(r.Body).Decode(&watermark)
-	// sourceImage := lib.InputImage("./Lenna.png")
-	// enc := base64.StdEncoding.EncodeToString(sourceImage)
+	c.BindJSON(&watermark)
+
 	image := lib.DecodeBase64(watermark.Image)
-	embedText := lib.DecodeWatermark(image)
-	json.NewEncoder(w).Encode(Watermark{
-		Text: strings.TrimSpace(embedText),
+	decodeText := lib.DecodeWatermark(image)
+	c.JSON(200, Watermark{
+		Text: decodeText,
 	})
 }
 
 func main() {
-	http.HandleFunc("/api/embed", embed)
-	http.HandleFunc("/api/decode", decode)
-	fmt.Println("http://localhost:8080/api")
-	http.ListenAndServe(":8080", nil)
+	router := gin.Default()
+
+	router.Use(cors.New(cors.Config{
+		// アクセスを許可したいアクセス元
+		AllowOrigins: []string{
+			"https://localhost:5000",
+			"http://127.0.0.1:5500",
+		},
+		// アクセスを許可したいHTTPメソッド(以下の例だとPUTやDELETEはアクセスできません)
+		AllowMethods: []string{
+			"POST",
+			"GET",
+			"OPTIONS",
+		},
+		// 許可したいHTTPリクエストヘッダ
+		AllowHeaders: []string{
+			"Access-Control-Allow-Credentials",
+			"Access-Control-Allow-Headers",
+			"Content-Type",
+			"Content-Length",
+			"Accept-Encoding",
+			"Authorization",
+		},
+		// cookieなどの情報を必要とするかどうか
+		AllowCredentials: true,
+		// preflightリクエストの結果をキャッシュする時間
+		MaxAge: 24 * time.Hour,
+	}))
+
+	router.POST("/api/embed", embed)
+	router.POST("/api/decode", decode)
+
+	router.Run()
 }
