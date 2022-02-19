@@ -1,8 +1,17 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import axios from 'axios';
 
 function App() {
+  const testfunc = () => {
+    axios
+      .post('/api/test')
+      .then(responce => {
+        console.log(responce.data);
+      })
+  }
+  
   return (
     <div className="App">
       <header className="App-header">
@@ -18,6 +27,7 @@ function App() {
         >
           Learn React
         </a>
+        <button onClick={testfunc}>test</button>
       </header>
     </div>
   );

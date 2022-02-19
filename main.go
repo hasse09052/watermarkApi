@@ -1,7 +1,6 @@
 package main
 
 import (
-	"net/http"
 	"watermarkApi/controllers"
 
 	"github.com/gin-gonic/gin"
@@ -10,9 +9,14 @@ import (
 func main() {
 	router := gin.Default()
 
-	router.StaticFS("/", http.Dir("views"))
+	router.Static("/", "./views/src")
 	router.POST("/api/embed", controllers.Embed)
 	router.POST("/api/decode", controllers.Decode)
+	router.POST("/api/test", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "pong",
+		})
+	})
 
 	router.Run()
 }
