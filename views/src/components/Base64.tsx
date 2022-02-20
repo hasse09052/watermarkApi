@@ -1,4 +1,5 @@
 import React from "react";
+import { Button, Input } from "@material-ui/core";
 
 interface Props {
   dataUriImage: string;
@@ -20,8 +21,13 @@ const Base64: React.FC<Props> = (props) => {
 
   return (
     <div>
-      <input type="file" onChange={previewImage} />
-      <img src={props.dataUriImage} alt="" />
+      <label htmlFor="inputFileForm">
+        <p>画像をアップロードして下さい</p>
+        <figure>
+          <img src={props.dataUriImage} alt="" />
+        </figure>
+        <input id="inputFileForm" type="file" onChange={previewImage} />
+      </label>
     </div>
   );
 };
