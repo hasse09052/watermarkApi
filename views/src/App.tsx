@@ -1,21 +1,13 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import axios from 'axios';
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Embed from "./pages/Embed";
 
 function App() {
-  const testfunc = () => {
-    axios
-      .post('/api/test')
-      .then(responce => {
-        console.log(responce.data);
-      })
-  }
-  
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
@@ -27,8 +19,12 @@ function App() {
         >
           Learn React
         </a>
-        <button onClick={testfunc}>test</button>
       </header>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Embed />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }

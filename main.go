@@ -9,7 +9,7 @@ import (
 func main() {
 	router := gin.Default()
 
-	router.Static("/", "./views/src")
+	router.Static("/", "./views/build")
 	router.POST("/api/embed", controllers.Embed)
 	router.POST("/api/decode", controllers.Decode)
 	router.POST("/api/test", func(c *gin.Context) {
