@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import Base64 from "../components/Base64";
+import styled from "styled-components";
 import axios from "axios";
 import { Button, TextField, Link, CircularProgress } from "@material-ui/core";
+
+import Base64 from "../components/Base64";
 
 const Embed: React.FC = () => {
   const [dataUriImage, setDataUriImage] = useState("");
@@ -32,27 +34,25 @@ const Embed: React.FC = () => {
   };
 
   return (
-    <>
-      <form>
-        <Base64 dataUriImage={dataUriImage} setDataUriImage={setDataUriImage} />
-        <div>
-          <TextField
-            value={embedText}
-            label="埋め込むテキスト"
-            variant="outlined"
-            onChange={changeEmbedText}
-          />
-        </div>
+    <div>
+      <Base64 dataUriImage={dataUriImage} setDataUriImage={setDataUriImage} />
+      <div>
+        <TextField
+          value={embedText}
+          label="埋め込むテキスト"
+          variant="outlined"
+          onChange={changeEmbedText}
+        />
+      </div>
 
-        <Button
-          type="button"
-          onClick={embedWatermark}
-          variant="contained"
-          color="primary"
-        >
-          送信
-        </Button>
-      </form>
+      <Button
+        type="button"
+        onClick={embedWatermark}
+        variant="contained"
+        color="primary"
+      >
+        送信
+      </Button>
       <img src={dataUriEmbedImage} alt="" />
       <a href={dataUriEmbedImage} download="watermark.png">
         ダウンロード
@@ -61,7 +61,7 @@ const Embed: React.FC = () => {
         {'color="inherit"'}
       </Link>
       <CircularProgress />
-    </>
+    </div>
   );
 };
 

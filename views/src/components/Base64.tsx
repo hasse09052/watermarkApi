@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Input } from "@material-ui/core";
+import styled from "styled-components";
 
 interface Props {
   dataUriImage: string;
@@ -20,16 +20,59 @@ const Base64: React.FC<Props> = (props) => {
   };
 
   return (
-    <div>
-      <label htmlFor="inputFileForm">
-        <p>画像をアップロードして下さい</p>
-        <figure>
-          <img src={props.dataUriImage} alt="" />
-        </figure>
-        <input id="inputFileForm" type="file" onChange={previewImage} />
-      </label>
-    </div>
+    <InputFileArea>
+      <p>画像をアップロードして下さい</p>
+      <figure>
+        <img src={props.dataUriImage} alt="" />
+      </figure>
+      <input type="file" onChange={previewImage} />
+    </InputFileArea>
   );
 };
 
 export default Base64;
+
+const InputFileArea = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-height: 500px;
+  border: 1px black dashed;
+  position relative;
+  overflow: hidden;
+
+  input {
+    display: block;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    background: red;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+  }
+
+  figure {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    // position: absolute;
+    // z-index: 1;
+
+    img {
+      display: block;
+      height:auto;
+      max-width:100%;
+      max-height: 500px;
+      object-fit: cover;
+
+    }
+  }
+`;
