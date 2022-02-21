@@ -21,10 +21,13 @@ const Base64: React.FC<Props> = (props) => {
 
   return (
     <InputFileArea>
-      <p>画像をアップロードして下さい</p>
-      <figure>
-        <img src={props.dataUriImage} alt="" />
-      </figure>
+      {props.dataUriImage ? (
+        <figure>
+          <img src={props.dataUriImage} alt="" />
+        </figure>
+      ) : (
+        <p>画像をアップロードして下さい</p>
+      )}
       <input type="file" onChange={previewImage} />
     </InputFileArea>
   );
@@ -38,7 +41,9 @@ const InputFileArea = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
+  min-height: 300px;
   max-height: 500px;
+  padding: 20px;
   border: 1px black dashed;
   position relative;
   overflow: hidden;
@@ -63,8 +68,6 @@ const InputFileArea = styled.div`
     height: 100%;
     margin: 0;
     padding: 0;
-    // position: absolute;
-    // z-index: 1;
 
     img {
       display: block;
@@ -72,7 +75,6 @@ const InputFileArea = styled.div`
       max-width:100%;
       max-height: 500px;
       object-fit: cover;
-
     }
   }
 `;
