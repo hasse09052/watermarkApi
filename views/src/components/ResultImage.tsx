@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Button, Modal, Box } from "@material-ui/core";
+import { Button, Modal, Box } from "@mui/material";
 import styled from "styled-components";
 
 interface Props {

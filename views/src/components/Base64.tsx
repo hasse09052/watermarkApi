@@ -41,8 +41,7 @@ const InputFileArea = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  min-height: 300px;
-  max-height: 500px;
+  height: 300px;
   padding: 20px;
   border: 1px black dashed;
   position relative;
@@ -73,7 +72,7 @@ const InputFileArea = styled.div`
       display: block;
       height:auto;
       max-width:100%;
-      max-height: 500px;
+      max-height: 300px;
       object-fit: cover;
     }
   }

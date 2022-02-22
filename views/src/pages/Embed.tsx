@@ -1,13 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import {
-  Button,
-  TextField,
-  Modal,
-  CircularProgress,
-  Box,
-} from "@material-ui/core";
+import { Button, TextField, Modal, Box, CircularProgress } from "@mui/material";
+import { styled as styledMui } from "@mui/material/styles";
 
 import Base64 from "../components/Base64";
 import ResultImage from "../components/ResultImage";
@@ -17,6 +12,7 @@ const Embed: React.FC = () => {
   const [embedImageBase64, setEmbedImageBase64] = useState("");
   const [embedText, setEmbedText] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const dataUriOption = dataUriImage.split(",")[0];
   const imageBase64 = dataUriImage.split(",")[1];
@@ -24,6 +20,7 @@ const Embed: React.FC = () => {
 
   const embedWatermark = () => {
     if (dataUriImage) {
+      setIsLoading(true);
       axios
         .post("/api/embed", {
           image: imageBase64,
@@ -33,7 +30,9 @@ const Embed: React.FC = () => {
           setEmbedImageBase64(response.data.image);
           setIsOpen(true);
         })
-        .finally(() => {});
+        .finally(() => {
+          setIsLoading(false);
+        });
     } else {
       console.log("空です");
     }
@@ -74,7 +73,17 @@ const Embed: React.FC = () => {
           dataUriImage={dataUriEmbedImage}
         />
       )}
+
       {/* {dataUriImage && <ResultImage dataUriImage={dataUriImage} />} */}
+      {isLoading && (
+        <Modal
+          open={true}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <CustomCircularProgress />
+        </Modal>
+      )}
     </Wrapper>
   );
 };
@@ -98,3 +107,15 @@ const Wrapper = styled.div`
     }
   }
 `;
+
+const CustomCircularProgress = styledMui(CircularProgress)({
+  width: "100px !important",
+  height: "100px !important",
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  ":focus": {
+    outline: 0,
+  },
+});
