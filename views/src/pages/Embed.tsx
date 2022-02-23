@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import { Button, TextField, Modal, Box, CircularProgress } from "@mui/material";
+import {
+  Button,
+  TextField,
+  Modal,
+  Alert,
+  CircularProgress,
+} from "@mui/material";
 import { styled as styledMui } from "@mui/material/styles";
 
 import Base64 from "../components/Base64";
@@ -13,6 +19,8 @@ const Embed: React.FC = () => {
   const [embedText, setEmbedText] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isValidEmbedText, setIsValidEmbedText] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const dataUriOption = dataUriImage.split(",")[0];
   const imageBase64 = dataUriImage.split(",")[1];
@@ -39,12 +47,24 @@ const Embed: React.FC = () => {
   };
 
   const changeEmbedText = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (
+      e.target.value.length === 0 ||
+      !e.target.value.match(/^[a-zA-Z0-9]+$/)
+    ) {
+      setIsValidEmbedText(false);
+    } else {
+      setIsValidEmbedText(true);
+    }
     setEmbedText(e.target.value);
   };
 
   return (
     <Wrapper>
-      <Base64 dataUriImage={dataUriImage} setDataUriImage={setDataUriImage} />
+      <Base64
+        dataUriImage={dataUriImage}
+        setDataUriImage={setDataUriImage}
+        setErrorMessage={setErrorMessage}
+      />
       <div className="inputWrap">
         <TextField
           value={embedText}
@@ -52,8 +72,15 @@ const Embed: React.FC = () => {
           variant="outlined"
           onChange={changeEmbedText}
           className="inputText"
+          error={!isValidEmbedText}
         />
       </div>
+
+      {errorMessage && (
+        <Alert variant="filled" severity="error" sx={{ margin: "20px 0" }}>
+          {errorMessage}
+        </Alert>
+      )}
 
       <div className="buttonWrap">
         <Button
@@ -61,6 +88,7 @@ const Embed: React.FC = () => {
           onClick={embedWatermark}
           variant="contained"
           color="primary"
+          disabled={dataUriImage.length === 0 || !isValidEmbedText}
         >
           送信
         </Button>
@@ -74,7 +102,6 @@ const Embed: React.FC = () => {
         />
       )}
 
-      {/* {dataUriImage && <ResultImage dataUriImage={dataUriImage} />} */}
       {isLoading && (
         <Modal
           open={true}
