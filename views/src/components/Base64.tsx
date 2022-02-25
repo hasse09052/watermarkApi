@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { Button } from "@mui/material";
+import { Button, Alert } from "@mui/material";
 
 interface Props {
   dataUriImage: string;
   setDataUriImage: React.Dispatch<React.SetStateAction<string>>;
-  setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const CAN_MIME_IMAGE = {
@@ -14,10 +13,11 @@ const CAN_MIME_IMAGE = {
 type CAN_MIME_IMAGE = typeof CAN_MIME_IMAGE[keyof typeof CAN_MIME_IMAGE]; // 'iOS' | 'Android'
 
 const Base64: React.FC<Props> = (props) => {
+  const [errorMessage, setErrorMessage] = useState("");
   const sizeLimit = 1024 * 1024 * 1;
 
   const previewImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    props.setErrorMessage("");
+    setErrorMessage("");
 
     if (e.target.files?.length === 1) {
       //バリデーション
@@ -25,7 +25,7 @@ const Base64: React.FC<Props> = (props) => {
         e.target?.files[0].size > sizeLimit ||
         e.target?.files[0].type !== CAN_MIME_IMAGE.PNG
       ) {
-        props.setErrorMessage("画像は1MB未満のpng画像のみ対応しています");
+        setErrorMessage("画像は1MB未満のpng画像のみ対応しています");
         return;
       }
 
@@ -40,21 +40,28 @@ const Base64: React.FC<Props> = (props) => {
   };
 
   return (
-    <InputFileArea>
-      {props.dataUriImage ? (
-        <figure>
-          <img src={props.dataUriImage} alt="" />
-        </figure>
-      ) : (
-        <>
-          <p className="button">画像を選択するかドラッグして下さい</p>
-          <Button type="button" variant="contained" color="primary">
-            画像を選択する
-          </Button>
-        </>
+    <>
+      <InputFileArea>
+        {props.dataUriImage ? (
+          <figure>
+            <img src={props.dataUriImage} alt="" />
+          </figure>
+        ) : (
+          <>
+            <p className="button">画像を選択するかドラッグして下さい</p>
+            <Button type="button" variant="contained" color="primary">
+              画像を選択する
+            </Button>
+          </>
+        )}
+        <input type="file" onChange={previewImage} accept=".png" required />
+      </InputFileArea>
+      {errorMessage && (
+        <Alert variant="filled" severity="error" sx={{ margin: "20px 0" }}>
+          {errorMessage}
+        </Alert>
       )}
-      <input type="file" onChange={previewImage} accept=".png" required />
-    </InputFileArea>
+    </>
   );
 };
 

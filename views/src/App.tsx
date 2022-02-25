@@ -3,13 +3,12 @@ import styled from "styled-components";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Embed from "./pages/Embed";
+import Header from "./components/Header";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <p>きんぱく</p>
-      </header>
+      <Header />
       <Container>
         <BrowserRouter>
           <Routes>

@@ -19,6 +19,10 @@ const ResultImage: React.FC<Props> = (props) => {
       aria-describedby="modal-modal-description"
     >
       <Box sx={modalContent}>
+        <TextWrap>
+          <h3>署名に成功しました</h3>
+          <p>ダウンロードボタンか右クリックで保存して下さい</p>
+        </TextWrap>
         <Figure>
           <img src={props.dataUriImage} alt="" />
         </Figure>
@@ -50,6 +54,17 @@ const modalContent = {
   boxShadow: 24,
   p: 4,
 };
+
+const TextWrap = styled.div`
+  text-align: center;
+  h3 {
+    margin: 0 0 20px;
+  }
+
+  p {
+    margin: 0 0 40px;
+  }
+`;
 
 const Figure = styled.figure`
   display: flex;
