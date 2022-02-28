@@ -12,6 +12,8 @@ import { styled as styledMui } from "@mui/material/styles";
 
 import Base64 from "../components/Base64";
 import ResultImage from "../components/ResultImage";
+import PageTitle from "../components/PageTitle";
+import Loading from "../components/Loading";
 
 const Embed: React.FC = () => {
   const [dataUriImage, setDataUriImage] = useState("");
@@ -59,6 +61,7 @@ const Embed: React.FC = () => {
 
   return (
     <Wrapper>
+      <PageTitle />
       <Base64 dataUriImage={dataUriImage} setDataUriImage={setDataUriImage} />
 
       <div className="inputContainer">
@@ -103,15 +106,7 @@ const Embed: React.FC = () => {
         />
       )}
 
-      {isLoading && (
-        <Modal
-          open={true}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <CustomCircularProgress />
-        </Modal>
-      )}
+      {isLoading && <Loading />}
     </Wrapper>
   );
 };
@@ -157,15 +152,3 @@ const Wrapper = styled.div`
     }
   }
 `;
-
-const CustomCircularProgress = styledMui(CircularProgress)({
-  width: "100px !important",
-  height: "100px !important",
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  ":focus": {
-    outline: 0,
-  },
-});

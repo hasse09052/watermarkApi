@@ -73,7 +73,7 @@ const InputFileArea = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 300px;
+  height: 350px;
   padding: 20px;
   border: 1px black dashed;
   position relative;

@@ -3,7 +3,7 @@ import { Box, AppBar, Toolbar, Typography, Button } from "@mui/material";
 
 const Header = () => {
   return (
-    <Box sx={{ flexGrow: 1, margin: "0 0 60px" }}>
+    <Box sx={{ flexGrow: 1, margin: "0 0 30px" }}>
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>

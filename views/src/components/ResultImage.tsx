@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Button, Modal, Box } from "@mui/material";
+import { Button, Modal, Box, ClickAwayListener } from "@mui/material";
 import styled from "styled-components";
 
 interface Props {
@@ -12,31 +12,28 @@ const ResultImage: React.FC<Props> = (props) => {
   const handleClose = () => props.setIsOpen(false);
 
   return (
-    <Modal
-      open={props.isOpen}
-      onClick={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box sx={modalContent}>
-        <TextWrap>
-          <h3>署名に成功しました</h3>
-          <p>ダウンロードボタンか右クリックで保存して下さい</p>
-        </TextWrap>
-        <Figure>
-          <img src={props.dataUriImage} alt="" />
-        </Figure>
-        <ButtonWrap>
-          <Button
-            href={props.dataUriImage}
-            color="secondary"
-            download="watermark.png"
-            variant="contained"
-          >
-            Download
-          </Button>
-        </ButtonWrap>
-      </Box>
+    <Modal open={props.isOpen}>
+      <ClickAwayListener onClickAway={handleClose}>
+        <Box sx={modalContent}>
+          <TextWrap>
+            <h3>署名に成功しました</h3>
+            <p>ダウンロードか右クリックで保存して下さい</p>
+          </TextWrap>
+          <Figure>
+            <img src={props.dataUriImage} alt="" />
+          </Figure>
+          <ButtonWrap>
+            <Button
+              href={props.dataUriImage}
+              color="secondary"
+              download="watermark.png"
+              variant="contained"
+            >
+              Download
+            </Button>
+          </ButtonWrap>
+        </Box>
+      </ClickAwayListener>
     </Modal>
   );
 };
