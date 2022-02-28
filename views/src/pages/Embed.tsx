@@ -12,6 +12,8 @@ import { styled as styledMui } from "@mui/material/styles";
 
 import Base64 from "../components/Base64";
 import ResultImage from "../components/ResultImage";
+import PageTitle from "../components/PageTitle";
+import Loading from "../components/Loading";
 
 const Embed: React.FC = () => {
   const [dataUriImage, setDataUriImage] = useState("");
@@ -20,7 +22,6 @@ const Embed: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isValidEmbedText, setIsValidEmbedText] = useState(true);
-  const [errorMessage, setErrorMessage] = useState("");
 
   const dataUriOption = dataUriImage.split(",")[0];
   const imageBase64 = dataUriImage.split(",")[1];
@@ -60,27 +61,26 @@ const Embed: React.FC = () => {
 
   return (
     <Wrapper>
-      <Base64
-        dataUriImage={dataUriImage}
-        setDataUriImage={setDataUriImage}
-        setErrorMessage={setErrorMessage}
-      />
-      <div className="inputWrap">
-        <TextField
-          value={embedText}
-          label="署名"
-          variant="outlined"
-          onChange={changeEmbedText}
-          className="inputText"
-          error={!isValidEmbedText}
-        />
-      </div>
+      <PageTitle />
+      <Base64 dataUriImage={dataUriImage} setDataUriImage={setDataUriImage} />
 
-      {errorMessage && (
-        <Alert variant="filled" severity="error" sx={{ margin: "20px 0" }}>
-          {errorMessage}
-        </Alert>
-      )}
+      <div className="inputContainer">
+        <div className="inputWrap">
+          <TextField
+            value={embedText}
+            label="署名"
+            variant="outlined"
+            onChange={changeEmbedText}
+            className="inputText"
+            error={!isValidEmbedText}
+          />
+        </div>
+        <ul className="annotation">
+          <li>画像は1MB未満のpng画像のみ対応しています</li>
+          <li>署名は半角英数字のみ可能です</li>
+          <li>画像は保存されませんのでご安心下さい</li>
+        </ul>
+      </div>
 
       <div className="buttonWrap">
         <Button
@@ -88,7 +88,11 @@ const Embed: React.FC = () => {
           onClick={embedWatermark}
           variant="contained"
           color="primary"
-          disabled={dataUriImage.length === 0 || !isValidEmbedText}
+          disabled={
+            dataUriImage.length === 0 ||
+            !isValidEmbedText ||
+            embedText.length === 0
+          }
         >
           送信
         </Button>
@@ -102,15 +106,7 @@ const Embed: React.FC = () => {
         />
       )}
 
-      {isLoading && (
-        <Modal
-          open={true}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <CustomCircularProgress />
-        </Modal>
-      )}
+      {isLoading && <Loading />}
     </Wrapper>
   );
 };
@@ -118,13 +114,35 @@ const Embed: React.FC = () => {
 export default Embed;
 
 const Wrapper = styled.div`
+  .inputContainer {
+    width: 80%;
+    margin: 0 auto;
+  }
+
   .inputWrap {
-    margin: 30px 0;
-    text-align: center;
+    margin: 30px auto 15px;
+  }
+
+  .annotation {
+    padding: 0;
+    margin: 0 0 20px;
+    list-style: none;
+
+    li {
+      padding: 0 0 0 1.5em;
+      position: relative;
+
+      &:before {
+        content: "※";
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+    }
   }
 
   .inputText {
-    width: 70%;
+    width: 100%;
   }
   .buttonWrap {
     text-align: center;
@@ -134,15 +152,3 @@ const Wrapper = styled.div`
     }
   }
 `;
-
-const CustomCircularProgress = styledMui(CircularProgress)({
-  width: "100px !important",
-  height: "100px !important",
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  ":focus": {
-    outline: 0,
-  },
-});
