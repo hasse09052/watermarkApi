@@ -11,16 +11,16 @@ import Footer from "./components/Footer";
 function App() {
   return (
     <AppContainer className="App">
-      <Header />
-      <Container>
-        <BrowserRouter>
+      <BrowserRouter>
+        <Header />
+        <Container>
           <Routes>
             <Route path="/" element={<Embed />} />
             <Route path="/decode" element={<Decode />} />
           </Routes>
-        </BrowserRouter>
-      </Container>
-      <Footer />
+        </Container>
+        <Footer />
+      </BrowserRouter>
     </AppContainer>
   );
 }
