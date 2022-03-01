@@ -4,7 +4,7 @@ import styled from "styled-components";
 import "sanitize.css";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Embed } from "./pages/Pages";
+import { Embed, Decode } from "./pages/Pages";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
@@ -16,7 +16,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Embed />} />
-            <Route path="/decode" element={<Embed />} />
+            <Route path="/decode" element={<Decode />} />
           </Routes>
         </BrowserRouter>
       </Container>

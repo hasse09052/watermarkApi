@@ -1,14 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import {
-  Button,
-  TextField,
-  Modal,
-  Alert,
-  CircularProgress,
-} from "@mui/material";
-import { styled as styledMui } from "@mui/material/styles";
+import { Button, TextField } from "@mui/material";
 
 import Base64 from "../components/Base64";
 import ResultImage from "../components/ResultImage";
@@ -42,8 +35,6 @@ const Embed: React.FC = () => {
         .finally(() => {
           setIsLoading(false);
         });
-    } else {
-      console.log("空です");
     }
   };
 
@@ -61,7 +52,7 @@ const Embed: React.FC = () => {
 
   return (
     <Wrapper>
-      <PageTitle />
+      <PageTitle title="署名" />
       <Base64 dataUriImage={dataUriImage} setDataUriImage={setDataUriImage} />
 
       <div className="inputContainer">

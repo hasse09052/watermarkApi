@@ -1,8 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
-const PageTitle = () => {
-  return <Title>署名</Title>;
+interface Props {
+  title: string;
+}
+
+const PageTitle: React.FC<Props> = (props) => {
+  return <Title>{props.title}</Title>;
 };
 
 export default PageTitle;
