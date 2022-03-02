@@ -4,5 +4,5 @@
 
 ## 使用技術
 
-サーバーサイド: Golang(Gin)
-フロントエンド: React
+サーバーサイド: Golang(Gin)  
+フロントエンド: React  
