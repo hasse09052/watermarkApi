@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"fmt"
 	"image"
+	"image/jpeg"
 	"image/png"
 	"math"
 	"math/cmplx"
@@ -12,6 +13,13 @@ import (
 	"strconv"
 
 	"github.com/mjibson/go-dsp/fft"
+)
+
+type Extension int
+
+const (
+	Png Extension = iota
+	Jpeg
 )
 
 func InputImage(filePath string) image.Image {
@@ -157,9 +165,15 @@ func DecodeBitTextArray(textArray []string) string {
 	return text
 }
 
-func EncodeBase64(image image.Image) string {
+func EncodeBase64(image image.Image, extension Extension) string {
 	buffer := new(bytes.Buffer)
-	png.Encode(buffer, image)
+	switch extension {
+	case Png:
+		png.Encode(buffer, image)
+	case Jpeg:
+		jpeg.Encode(buffer, image, &jpeg.Options{Quality: 100})
+	}
+
 	imageData := buffer.Bytes()
 	return base64.StdEncoding.EncodeToString(imageData)
 }

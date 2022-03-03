@@ -9,6 +9,7 @@ interface Props {
 
 const CAN_MIME_IMAGE = {
   PNG: "image/png",
+  JPEG: "image/jpeg",
 } as const;
 type CAN_MIME_IMAGE = typeof CAN_MIME_IMAGE[keyof typeof CAN_MIME_IMAGE]; // 'iOS' | 'Android'
 
@@ -23,7 +24,8 @@ const Base64: React.FC<Props> = (props) => {
       //バリデーション
       if (
         e.target?.files[0].size > sizeLimit ||
-        e.target?.files[0].type !== CAN_MIME_IMAGE.PNG
+        (e.target?.files[0].type !== CAN_MIME_IMAGE.PNG &&
+          e.target?.files[0].type !== CAN_MIME_IMAGE.JPEG)
       ) {
         setErrorMessage("画像は1MB未満のpng画像のみ対応しています");
         return;
@@ -54,7 +56,12 @@ const Base64: React.FC<Props> = (props) => {
             </Button>
           </>
         )}
-        <input type="file" onChange={previewImage} accept=".png" required />
+        <input
+          type="file"
+          onChange={previewImage}
+          accept=".png, .jpg, .jpeg"
+          required
+        />
       </InputFileArea>
       {errorMessage && (
         <Alert variant="filled" severity="error" sx={{ margin: "20px 0" }}>
