@@ -1,4 +1,4 @@
-# watermarkApi
+# watermarkApp
 
 画像に電子透かしを埋め込む Web アプリケーションです
 
